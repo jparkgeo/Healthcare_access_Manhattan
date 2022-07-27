@@ -3,6 +3,7 @@
     "description": "Calculates spatial accessibility using a variety of metrics using the Pysal access package: https://github.com/pysal/access",
     "estimated_runtime": "60 minutes",
     "container": "cybergisx-0.4",
+    "pre_processing_stage": "bash update_osmnx.sh",
     "execution_stage": "python measure_access.py",
     "slurm_input_rules": {
            "time": {
