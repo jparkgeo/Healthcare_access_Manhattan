@@ -1,2 +1,3 @@
 #!/bin/sh
-python -m conda install --channel=conda-forge osmnx --y
+python -m pip install osmnx
+# python -m conda install --channel=conda-forge osmnx --y
