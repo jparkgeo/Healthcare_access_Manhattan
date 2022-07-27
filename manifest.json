@@ -1,0 +1,30 @@
+{
+    "name": "Manhattan 24-hour healthcare accessibility",
+    "description": "Calculates spatial accessibility using a variety of metrics using the Pysal access package: https://github.com/pysal/access",
+    "estimated_runtime": "60 minutes",
+    "container": "cybergisx-0.4",
+    "execution_stage": "python measure_access.py",
+    "slurm_input_rules": {
+           "time": {
+                "max": 120,
+                "min": 60,
+                "default_value": 60,
+                "step": 10,
+                "unit": "Minutes"
+            },
+            "memory": {
+                "max": 16,
+                "min": 4,
+                "default_value": 8,
+                "step": 1,
+                "unit": "GB"
+            },
+            "num_of_node": {
+                "max": 8,
+                "min": 4,
+                "default_value": 6,
+                "step": 1
+            }
+    },
+    "require_upload_data": false
+}

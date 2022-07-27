@@ -1,3 +1,14 @@
+# Folders with big data
+/data/DataAxle
+/data/ny_ctpp
+/data/OSM_planet
+/data/Uber
+/data/Tiger
+.ipynb_checkpoints
+cache
+
+
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -26,6 +37,8 @@ share/python-wheels/
 .installed.cfg
 *.egg
 MANIFEST
+cache
+*.idea
 
 # PyInstaller
 #  Usually these files are written by a python script from a template
