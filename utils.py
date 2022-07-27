@@ -5,7 +5,9 @@ import osmnx as ox
 from shapely.geometry import Point, Polygon, MultiPolygon
 from tqdm import tqdm
 import geopandas as gpd
+import os
 
+PWD = os.path.dirname(os.path.realpath(__file__))
 
 def calculate_azimuth(x1, y1, x2, y2):
     d_x = x2 - x1  # Delta of x coordinates
@@ -411,7 +413,8 @@ def gaussian(dij, d0):  # Gaussian function for distance decay
 
 
 def measure_access(day, hour, supply_loc, demand_loc):
-    G_hour = ox.load_graphml(f'data/reference_data/mobility/nyc_completed_{day}_{hour}.graphml')
+    G_hour = ox.load_graphml(
+        os.path.join(PWD, 'data', 'reference_data', 'mobility', f'nyc_completed_{day}_{hour}.graphml'))
     G_hour = remove_unnecessary_nodes(G_hour)
     G_hour = network_settings(G_hour)
 
@@ -455,7 +458,7 @@ def measure_access_unpacker(args):
 
 
 def measure_access_E2SFCA(day, hour, supply_loc, demand_loc):
-    G_hour = ox.load_graphml(f'data/reference_data/mobility/nyc_completed_{day}_{hour}.graphml')
+    G_hour = ox.load_graphml(os.path.join(PWD, 'data', 'reference_data', 'mobility', f'nyc_completed_{day}_{hour}.graphml'))
     G_hour = remove_unnecessary_nodes(G_hour)
     G_hour = network_settings(G_hour)
 

@@ -11,7 +11,7 @@ day = 'wd'  # Weekday (wd), Weekend (we)
 RESULTS_FOLDER = os.getenv('result_folder')
 print(f"The results folder is: {RESULTS_FOLDER}")
 
-print(os.path.dirname(os.path.realpath(__file__)))
+PWD = os.path.dirname(os.path.realpath(__file__))
 files = [f for f in os.listdir('.')]
 print(files)
 
@@ -22,7 +22,7 @@ commute_pop = gpd.read_file('./data/reference_data/floating_population_commute.g
 commute_pop = commute_pop.loc[commute_pop['GEOID'].str.startswith('36061')]
 general_doctors = general_doctors.loc[general_doctors['geometry'].within(commute_pop.geometry.unary_union)]
 
-G = ox.load_graphml('data/reference_data/mobility/nyc_completed_wd_12.graphml')
+G = ox.load_graphml(os.path.join(PWD, 'data', 'reference_data', 'mobility', 'nyc_completed_wd_12.graphml'))
 G = utils.remove_unnecessary_nodes(G)
 G = utils.network_settings(G)
 
