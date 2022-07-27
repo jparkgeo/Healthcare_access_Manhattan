@@ -411,7 +411,7 @@ def gaussian(dij, d0):  # Gaussian function for distance decay
 
 
 def measure_access(day, hour, supply_loc, demand_loc):
-    G_hour = ox.io.load_graphml(f'./data/reference_data/mobility/nyc_completed_{day}_{hour}.graphml')
+    G_hour = ox.load_graphml(f'./data/reference_data/mobility/nyc_completed_{day}_{hour}.graphml')
     G_hour = remove_unnecessary_nodes(G_hour)
     G_hour = network_settings(G_hour)
 
@@ -455,7 +455,7 @@ def measure_access_unpacker(args):
 
 
 def measure_access_E2SFCA(day, hour, supply_loc, demand_loc):
-    G_hour = ox.io.load_graphml(f'./data/reference_data/mobility/nyc_completed_{day}_{hour}.graphml')
+    G_hour = ox.load_graphml(f'./data/reference_data/mobility/nyc_completed_{day}_{hour}.graphml')
     G_hour = remove_unnecessary_nodes(G_hour)
     G_hour = network_settings(G_hour)
 
