@@ -12,6 +12,8 @@ RESULTS_FOLDER = os.getenv('result_folder')
 print(f"The results folder is: {RESULTS_FOLDER}")
 
 print(os.path.dirname(os.path.realpath(__file__)))
+files = [f for f in os.listdir('.')]
+print(files)
 
 ### -------- MAIN CODE STARTS HERE -------- ###
 # Load input files
