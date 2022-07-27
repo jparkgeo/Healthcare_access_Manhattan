@@ -411,7 +411,7 @@ def gaussian(dij, d0):  # Gaussian function for distance decay
 
 
 def measure_access(day, hour, supply_loc, demand_loc):
-    G_hour = ox.load_graphml(f'./data/reference_data/mobility/nyc_completed_{day}_{hour}.graphml')
+    G_hour = ox.load_graphml(f'data/reference_data/mobility/nyc_completed_{day}_{hour}.graphml')
     G_hour = remove_unnecessary_nodes(G_hour)
     G_hour = network_settings(G_hour)
 
@@ -441,8 +441,8 @@ def measure_access(day, hour, supply_loc, demand_loc):
                           G_hour
                           )
 
-    # supply_demand_ratio.to_file(f'./data/reference_data/access/G2SFCA_step1_{day}_h{hour}.geojson')
-    # access.to_file(f'./data/reference_data/access/G2SFCA_step2_{day}_h{hour}.geojson')
+    # supply_demand_ratio.to_file(f'data/reference_data/access/G2SFCA_step1_{day}_h{hour}.geojson')
+    # access.to_file(f'data/reference_data/access/G2SFCA_step2_{day}_h{hour}.geojson')
 
     # print(supply_demand_ratio.head(5))
     # print(access.head(5))
@@ -455,7 +455,7 @@ def measure_access_unpacker(args):
 
 
 def measure_access_E2SFCA(day, hour, supply_loc, demand_loc):
-    G_hour = ox.load_graphml(f'./data/reference_data/mobility/nyc_completed_{day}_{hour}.graphml')
+    G_hour = ox.load_graphml(f'data/reference_data/mobility/nyc_completed_{day}_{hour}.graphml')
     G_hour = remove_unnecessary_nodes(G_hour)
     G_hour = network_settings(G_hour)
 
@@ -492,8 +492,8 @@ def measure_access_E2SFCA(day, hour, supply_loc, demand_loc):
                           gaussian_decay
                           )
 
-    supply_demand_ratio.to_file(f'./data/reference_data/access/E2SFCA_step1_{day}_h{hour}.geojson')
-    access.to_file(f'./data/reference_data/access/E2SFCA_step2_{day}_h{hour}.geojson')
+    # supply_demand_ratio.to_file(f'data/reference_data/access/E2SFCA_step1_{day}_h{hour}.geojson')
+    # access.to_file(f'data/reference_data/access/E2SFCA_step2_{day}_h{hour}.geojson')
 
     return supply_demand_ratio, access
 
