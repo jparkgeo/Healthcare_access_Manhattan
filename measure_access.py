@@ -11,6 +11,8 @@ day = 'wd'  # Weekday (wd), Weekend (we)
 RESULTS_FOLDER = os.getenv('result_folder')
 print(f"The results folder is: {RESULTS_FOLDER}")
 
+print(os.path.dirname(os.path.realpath(__file__)))
+
 ### -------- MAIN CODE STARTS HERE -------- ###
 # Load input files
 general_doctors = gpd.read_file('./data/reference_data/general_physicians.geojson')
@@ -40,8 +42,8 @@ if __name__ == "__main__":
 
     # Save the measures of accessibility
     for hour in range(len(results)):
-        results[hour][0].to_file(os.path.join(RESULTS_FOLDER, f'./E2SFCA_step1_{day}_h{hour}.geojson'))
-        results[hour][1].to_file(os.path.join(RESULTS_FOLDER, f'./E2SFCA_step2_{day}_h{hour}.geojson'))
+        results[hour][0].to_file(os.path.join(RESULTS_FOLDER, f'E2SFCA_step1_{day}_h{hour}.geojson'))
+        results[hour][1].to_file(os.path.join(RESULTS_FOLDER, f'E2SFCA_step2_{day}_h{hour}.geojson'))
 
 
 
