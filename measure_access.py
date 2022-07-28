@@ -20,8 +20,8 @@ commute_pop = gpd.read_file('./data/reference_data/floating_population_commute.g
 commute_pop = commute_pop.loc[commute_pop['GEOID'].str.startswith('36061')]
 general_doctors = general_doctors.loc[general_doctors['geometry'].within(commute_pop.geometry.unary_union)]
 
-print(commute_pop.shape[0])
-print(general_doctors.shape[0])
+# print(commute_pop.shape[0])
+# print(general_doctors.shape[0])
 
 G = ox.load_graphml(os.path.join(PWD, 'data', 'reference_data', 'mobility', 'nyc_completed_wd_12.graphml'))
 G = utils.remove_unnecessary_nodes(G)
@@ -30,12 +30,14 @@ G = utils.network_settings(G)
 # Precompute necessary variables
 general_doctors = utils.find_nearest_osm(G, general_doctors)
 commute_pop = utils.find_nearest_osm(G, commute_pop)
+focus_hours = list(range(0, 24, 1))
+
 
 if __name__ == "__main__":
     pool = mp.Pool(6)
     results = pool.map(utils.measure_access_E2SFCA_unpacker,
                        zip(itertools.repeat(day),
-                           list(range(0, 24, 4)),
+                           focus_hours,
                            itertools.repeat(general_doctors),
                            itertools.repeat(commute_pop)
                            )
@@ -43,7 +45,7 @@ if __name__ == "__main__":
     pool.close()
 
     # Save the measures of accessibility
-    for idx, hour in enumerate(list(range(0, 24, 4))):
+    for idx, hour in enumerate(focus_hours):
         results[idx][0].to_file(os.path.join(RESULTS_FOLDER, f'E2SFCA_step1_{day}_h{hour}.geojson'))
         results[idx][1].to_file(os.path.join(RESULTS_FOLDER, f'E2SFCA_step2_{day}_h{hour}.geojson'))
 
