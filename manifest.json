@@ -7,9 +7,9 @@
     "execution_stage": "python measure_access.py",
     "slurm_input_rules": {
            "time": {
-                "max": 1440,
+                "max": 600,
                 "min": 360,
-                "default_value": 720,
+                "default_value": 600,
                 "step": 30,
                 "unit": "Minutes"
             },
