@@ -43,9 +43,9 @@ if __name__ == "__main__":
     pool.close()
 
     # Save the measures of accessibility
-    for hour in range(len(results)):
-        results[hour][0].to_file(os.path.join(RESULTS_FOLDER, f'E2SFCA_step1_{day}_h{hour}.geojson'))
-        results[hour][1].to_file(os.path.join(RESULTS_FOLDER, f'E2SFCA_step2_{day}_h{hour}.geojson'))
+    for idx, hour in enumerate(list(range(0, 24, 4))):
+        results[idx][0].to_file(os.path.join(RESULTS_FOLDER, f'E2SFCA_step1_{day}_h{hour}.geojson'))
+        results[idx][1].to_file(os.path.join(RESULTS_FOLDER, f'E2SFCA_step2_{day}_h{hour}.geojson'))
 
 
 
