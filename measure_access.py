@@ -12,8 +12,6 @@ RESULTS_FOLDER = os.getenv('result_folder')
 print(f"The results folder is: {RESULTS_FOLDER}")
 
 PWD = os.path.dirname(os.path.realpath(__file__))
-files = [f for f in os.listdir('.')]
-print(files)
 
 ### -------- MAIN CODE STARTS HERE -------- ###
 # Load input files
@@ -22,6 +20,9 @@ commute_pop = gpd.read_file('./data/reference_data/floating_population_commute.g
 commute_pop = commute_pop.loc[commute_pop['GEOID'].str.startswith('36061')]
 general_doctors = general_doctors.loc[general_doctors['geometry'].within(commute_pop.geometry.unary_union)]
 
+print(commute_pop.shape[0])
+print(general_doctors.shape[0])
+
 G = ox.load_graphml(os.path.join(PWD, 'data', 'reference_data', 'mobility', 'nyc_completed_wd_12.graphml'))
 G = utils.remove_unnecessary_nodes(G)
 G = utils.network_settings(G)
@@ -29,7 +30,6 @@ G = utils.network_settings(G)
 # Precompute necessary variables
 general_doctors = utils.find_nearest_osm(G, general_doctors)
 commute_pop = utils.find_nearest_osm(G, commute_pop)
-
 
 if __name__ == "__main__":
     pool = mp.Pool(6)

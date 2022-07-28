@@ -458,6 +458,7 @@ def measure_access_unpacker(args):
 
 
 def measure_access_E2SFCA(day, hour, supply_loc, demand_loc):
+    print(f'Assessment starts for {hour}')
     G_hour = ox.load_graphml(os.path.join(PWD, 'data', 'reference_data', 'mobility', f'nyc_completed_{day}_{hour}.graphml'))
     G_hour = remove_unnecessary_nodes(G_hour)
     G_hour = network_settings(G_hour)
@@ -475,6 +476,7 @@ def measure_access_E2SFCA(day, hour, supply_loc, demand_loc):
     demand_weight = f'{day}_h{hour}'
     ratio_var = f'ratio_{day}_h{hour}'
 
+    print(f'Step 1 starts for {hour}')
     supply_demand_ratio = E2SFCA_Step1(day,
                                        hour,
                                        supply_loc,
@@ -486,6 +488,7 @@ def measure_access_E2SFCA(day, hour, supply_loc, demand_loc):
                                        gaussian_decay
                                        )
 
+    print(f'Step 2 starts for {hour}')
     access = E2SFCA_Step2(day,
                           hour,
                           supply_demand_ratio,
