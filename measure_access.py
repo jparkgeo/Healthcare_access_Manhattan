@@ -10,14 +10,17 @@ import os
 day = 'wd'  # Weekday (wd), Weekend (we)
 RESULTS_FOLDER = os.getenv('result_folder')
 print(f"The results folder is: {RESULTS_FOLDER}")
+print(f"CPU Count per tasks from mp package: {mp.cpu_count()}")
+print(f"CPU Count per tasks through os package: {os.environ['SLURM_CPUS_PER_TASK']}")
 
 PWD = os.path.dirname(os.path.realpath(__file__))
-
+print(PWD)
+'''
 ### -------- MAIN CODE STARTS HERE -------- ###
 # Load input files
 general_doctors = gpd.read_file('./data/reference_data/general_physicians.geojson')
 commute_pop = gpd.read_file('./data/reference_data/floating_population_commute.geojson')
-commute_pop = commute_pop.loc[commute_pop['GEOID'].str.startswith('36061')]
+commute_pop = commute_pop.loc[commute_pop['GEOID'].str.startswith('36085')]
 general_doctors = general_doctors.loc[general_doctors['geometry'].within(commute_pop.geometry.unary_union)]
 
 # print(commute_pop.shape[0])
@@ -50,4 +53,4 @@ if __name__ == "__main__":
         results[idx][1].to_file(os.path.join(RESULTS_FOLDER, f'E2SFCA_step2_{day}_h{hour}.geojson'))
 
 
-
+'''
