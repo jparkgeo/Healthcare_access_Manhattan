@@ -7,25 +7,27 @@
     "execution_stage": "python measure_access.py",
     "slurm_input_rules": {
            "time": {
-                "max": 600,
-                "min": 360,
-                "default_value": 600,
-                "step": 30,
-                "unit": "Minutes"
+                "max": 10,
+                "min": 5,
+                "default_value": 10,
+                "step": 1,
+                "unit": "Hours"
             },
-            "memory": {
+            "memory_per_cpu": {
                 "max": 32,
                 "min": 8,
                 "default_value": 16,
                 "step": 1,
                 "unit": "GB"
             },
-            "num_of_node": {
-                "max": 8,
-                "min": 4,
-                "default_value": 8,
+            "num_of_task": {
+                "max": 20,
+                "min": 1,
+                "default_value": 4,
                 "step": 1
             }
     },
-    "require_upload_data": false
+    "require_upload_data": false,
+    "supported_hpc": ["keeling_community", "expanse_community", "anvil_community"],
+    "default_hpc": "keeling_community"
 }
