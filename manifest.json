@@ -14,16 +14,16 @@
                 "unit": "Hours"
             },
             "memory_per_cpu": {
-                "max": 32,
-                "min": 8,
-                "default_value": 16,
+                "max": 10,
+                "min": 4,
+                "default_value": 8,
                 "step": 1,
                 "unit": "GB"
             },
             "num_of_task": {
-                "max": 20,
-                "min": 1,
-                "default_value": 4,
+                "max": 32,
+                "min": 6,
+                "default_value": 24,
                 "step": 1
             }
     },
