@@ -40,7 +40,7 @@ product_day_hour = list(itertools.product(days, hours))
 days_ = [day for day, hour in product_day_hour]
 hours_ = [hour for day, hour in product_day_hour]
 
-
+'''
 if __name__ == "__main__":
     pool = mp.Pool(PROCESSORS)
     results = pool.map(utils.measure_access_unpacker,
@@ -56,4 +56,4 @@ if __name__ == "__main__":
     for idx in range(len(results)):
         results[idx][0].to_file(f"./results/access/T_G2SFCA_step1_{days_[idx]}_h{hours_[idx]}.geojson")
         results[idx][1].to_file(f"./results/access/T_G2SFCA_step2_{days_[idx]}_h{hours_[idx]}.geojson")
-
+'''
