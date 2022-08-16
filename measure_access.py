@@ -17,7 +17,7 @@ RESULTS_FOLDER = os.getenv('result_folder')
 
 PWD = os.path.dirname(os.path.realpath(__file__))
 print(PWD)
-
+'''
 ### -------- MAIN CODE STARTS HERE -------- ###
 # Load input files
 general_doctors = gpd.read_file('./data/reference_data/general_physicians.geojson')
@@ -56,4 +56,4 @@ if __name__ == "__main__":
     for idx in range(len(results)):
         results[idx][0].to_file(f"./results/access/T_G2SFCA_step1_{days_[idx]}_h{hours_[idx]}.geojson")
         results[idx][1].to_file(f"./results/access/T_G2SFCA_step2_{days_[idx]}_h{hours_[idx]}.geojson")
-
+'''
