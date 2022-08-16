@@ -22,9 +22,9 @@
             },
             "num_of_task": {
                 "max": 32,
-                "min": 6,
+                "min": 16,
                 "default_value": 24,
-                "step": 1
+                "step": 6
             }
     },
     "require_upload_data": false,

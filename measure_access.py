@@ -37,7 +37,7 @@ focus_hours = list(range(0, 24, 1))
 
 
 if __name__ == "__main__":
-    pool = mp.Pool(24)
+    pool = mp.Pool(6)
     results = pool.map(utils.measure_access_E2SFCA_unpacker,
                        zip(itertools.repeat(day),
                            focus_hours,
