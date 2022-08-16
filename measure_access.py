@@ -11,13 +11,15 @@ days = ['wd', 'we']  # Weekday (wd), Weekend (we)
 hours = list(range(24))
 PROCESSORS = 16
 RESULTS_FOLDER = os.getenv('result_folder')
-# print(f"The results folder is: {RESULTS_FOLDER}")
+print(f"The results folder is: {RESULTS_FOLDER}")
 # print(f"CPU Count per tasks from mp package: {mp.cpu_count()}")
-# print(f"CPU Count per tasks through os package: {os.environ['SLURM_CPUS_PER_TASK']}")
+print(f'entire os environment {os.environ}')
+print(f"CPU Count per tasks through os package: {os.environ['SLURM_CPUS_PER_TASK']}")
 
 PWD = os.path.dirname(os.path.realpath(__file__))
 print(PWD)
 
+'''
 ### -------- MAIN CODE STARTS HERE -------- ###
 # Load input files
 general_doctors = gpd.read_file('./data/reference_data/general_physicians.geojson')
@@ -40,7 +42,7 @@ product_day_hour = list(itertools.product(days, hours))
 days_ = [day for day, hour in product_day_hour]
 hours_ = [hour for day, hour in product_day_hour]
 
-'''
+
 if __name__ == "__main__":
     pool = mp.Pool(PROCESSORS)
     results = pool.map(utils.measure_access_unpacker,
