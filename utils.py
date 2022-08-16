@@ -259,7 +259,7 @@ def find_nearest_osm(network, gdf):
     return gdf
 
 
-def calculate_catchment_area(network, nearest_osm, minutes, distance_unit='travel_time'):
+def calculate_catchment_area_convexhull(network, nearest_osm, minutes, distance_unit='travel_time'):
     catchments = gpd.GeoDataFrame()
 
     # Create convex hull for each travel time (minutes), respectively.
@@ -299,7 +299,7 @@ def E2SFCA_Step1(day, hour, supply_loc, supply_open, supply_weight, demand_loc, 
     for s_idx, s_row in tqdm(supply_loc_.iterrows(), total=supply_loc_.shape[0]):
 
         if s_row[supply_open] == '1':  # If the facility is open
-            supply_ctmt_area = calculate_catchment_area(network, s_row['nearest_osm'], distant_decay.keys())
+            supply_ctmt_area = calculate_catchment_area_convexhull(network, s_row['nearest_osm'], distant_decay.keys())
 
             ctmt_pops = 0.0
             for c_idx, c_row in supply_ctmt_area.iterrows():
@@ -323,7 +323,7 @@ def E2SFCA_Step2(day, hour, supply_loc, demand_loc, ratio_var, network, distant_
     demand_loc_[f'access_{day}_h{hour}'] = np.nan
 
     for d_idx, d_row in tqdm(demand_loc_.iterrows(), total=demand_loc_.shape[0]):
-        demand_ctmt_area = calculate_catchment_area(network, d_row['nearest_osm'], distant_decay.keys())
+        demand_ctmt_area = calculate_catchment_area_convexhull(network, d_row['nearest_osm'], distant_decay.keys())
 
         ctmt_ratio = 0.0
         for c_idx, c_row in demand_ctmt_area.iterrows():
@@ -346,21 +346,18 @@ def G2SFCA_Step1(day, hour, supply_loc, supply_open, supply_weight, demand_loc, 
         if s_row[supply_open] == '1':  # If the facility is open
             access_nodes = nx.single_source_dijkstra_path_length(network,
                                                                  s_row['nearest_osm'],
-                                                                 thres_trvl_time,
+                                                                 cutoff=thres_trvl_time,
                                                                  weight='travel_time')
-            convex_hull = gpd.GeoSeries(nx.get_node_attributes
-                                        (network.subgraph(access_nodes), 'geometry')
-                                        ).unary_union.convex_hull
-            supply_ctmt_area = demand_loc.loc[demand_loc.geometry.centroid.within(convex_hull)]
+            supply_ctmt_area = {node_id: access_nodes[node_id]
+                                for node_id in access_nodes.keys()
+                                if node_id in demand_loc['nearest_osm'].to_list()
+                                }
 
             ctmt_pops = 0.0
-            for c_idx, c_row in supply_ctmt_area.iterrows():
-                trvl_time_ = nx.dijkstra_path_length(network,
-                                                     s_row['nearest_osm'],
-                                                     c_row['nearest_osm'],
-                                                     weight='travel_time')
-                if trvl_time_ <= thres_trvl_time:
-                    ctmt_pops += c_row[demand_weight] * gaussian(trvl_time_, thres_trvl_time)
+            for node_id, node_dist in supply_ctmt_area.items():
+                temp_pop = demand_loc.loc[demand_loc['nearest_osm'] == node_id, demand_weight].values[0]
+                ctmt_pops += temp_pop * log_logistic(node_dist, thres_trvl_time, 1.82, 13.89)
+                # ctmt_pops += temp_pop * gaussian(node_dist, thres_trvl_time)
 
             supply_loc_.at[s_idx, f'ratio_{day}_h{hour}'] = s_row[supply_weight] / ctmt_pops * 100000
         else:
@@ -369,6 +366,7 @@ def G2SFCA_Step1(day, hour, supply_loc, supply_open, supply_weight, demand_loc, 
     if supply_loc_.shape[0] > 0:
         supply_loc_ = supply_loc_[['place_id', 'api_name', 'lat', 'long', 'api_addr', 'geometry',
                                    'nearest_osm', f'{day}_hours', 'doc_count', f'ratio_{day}_h{hour}']]
+
 
     return supply_loc_
 
@@ -382,19 +380,16 @@ def G2SFCA_Step2(day, hour, supply_loc, demand_loc, ratio_var, network, thres_tr
                                                              d_row['nearest_osm'],
                                                              thres_trvl_time,
                                                              weight='travel_time')
-        convex_hull = gpd.GeoSeries(nx.get_node_attributes
-                                    (network.subgraph(access_nodes), 'geometry')
-                                    ).unary_union.convex_hull
-        demand_ctmt_area = supply_loc.loc[supply_loc.geometry.centroid.within(convex_hull)]
+
+        demand_ctmt_area = {node_id: access_nodes[node_id]
+                            for node_id in access_nodes.keys()
+                            if node_id in supply_loc['nearest_osm'].to_list()}
 
         ctmt_ratio = 0.0
-        for c_idx, c_row in demand_ctmt_area.iterrows():
-            trvl_time_ = nx.dijkstra_path_length(network,
-                                                 d_row['nearest_osm'],
-                                                 c_row['nearest_osm'],
-                                                 weight='travel_time')
-            if trvl_time_ <= thres_trvl_time:
-                ctmt_ratio += c_row[ratio_var] * gaussian(trvl_time_, thres_trvl_time)
+        for node_id, node_dist  in demand_ctmt_area.items():
+            temp_ratio = supply_loc.loc[supply_loc['nearest_osm'] == node_id, ratio_var].values[0]
+            ctmt_ratio += temp_ratio * log_logistic(node_dist, thres_trvl_time, 1.82, 13.89)
+            # ctmt_ratio += temp_ratio * gaussian(node_dist, thres_trvl_time)
 
         demand_loc_.at[d_idx, f'access_{day}_h{hour}'] = ctmt_ratio
 
@@ -407,6 +402,14 @@ def G2SFCA_Step2(day, hour, supply_loc, demand_loc, ratio_var, network, thres_tr
 def gaussian(dij, d0):  # Gaussian function for distance decay
     if d0 >= dij:
         val = (math.exp(-1 / 2 * ((dij / d0) ** 2)) - math.exp(-1 / 2)) / (1 - math.exp(-1 / 2))
+        return val
+    else:
+        return 0
+
+
+def log_logistic(tij, t0, beta, theta):
+    if t0 >= tij:
+        val = 1 / (1 + (tij / theta) ** beta)
         return val
     else:
         return 0
@@ -443,12 +446,6 @@ def measure_access(day, hour, supply_loc, demand_loc):
                           ratio_var,
                           G_hour
                           )
-
-    # supply_demand_ratio.to_file(f'data/reference_data/access/G2SFCA_step1_{day}_h{hour}.geojson')
-    # access.to_file(f'data/reference_data/access/G2SFCA_step2_{day}_h{hour}.geojson')
-
-    # print(supply_demand_ratio.head(5))
-    # print(access.head(5))
 
     return supply_demand_ratio, access
 
@@ -498,11 +495,7 @@ def measure_access_E2SFCA(day, hour, supply_loc, demand_loc):
                           gaussian_decay
                           )
 
-    # supply_demand_ratio.to_file(f'data/reference_data/access/E2SFCA_step1_{day}_h{hour}.geojson')
-    # access.to_file(f'data/reference_data/access/E2SFCA_step2_{day}_h{hour}.geojson')
-
     return supply_demand_ratio, access
-
 
 
 def measure_access_E2SFCA_unpacker(args):

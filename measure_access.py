@@ -5,14 +5,16 @@ import itertools
 import utils
 import os
 
-
 ### -------- GLOBAL VARIABLES -------- ###
-day = 'wd'  # Weekday (wd), Weekend (we)
+# day = 'wd'  # Weekday (wd), Weekend (we)
+days = ['wd', 'we']  # Weekday (wd), Weekend (we)
+hours = list(range(24))
+PROCESSORS = 16
 RESULTS_FOLDER = os.getenv('result_folder')
 # print(f"The results folder is: {RESULTS_FOLDER}")
 # print(f"CPU Count per tasks from mp package: {mp.cpu_count()}")
 # print(f"CPU Count per tasks through os package: {os.environ['SLURM_CPUS_PER_TASK']}")
-#
+
 PWD = os.path.dirname(os.path.realpath(__file__))
 print(PWD)
 
@@ -33,14 +35,17 @@ G = utils.network_settings(G)
 # Precompute necessary variables
 general_doctors = utils.find_nearest_osm(G, general_doctors)
 commute_pop = utils.find_nearest_osm(G, commute_pop)
-focus_hours = list(range(0, 24, 1))
+
+product_day_hour = list(itertools.product(days, hours))
+days_ = [day for day, hour in product_day_hour]
+hours_ = [hour for day, hour in product_day_hour]
 
 
 if __name__ == "__main__":
-    pool = mp.Pool(6)
-    results = pool.map(utils.measure_access_E2SFCA_unpacker,
-                       zip(itertools.repeat(day),
-                           focus_hours,
+    pool = mp.Pool(PROCESSORS)
+    results = pool.map(utils.measure_access_unpacker,
+                       zip(days_,
+                           hours_,
                            itertools.repeat(general_doctors),
                            itertools.repeat(commute_pop)
                            )
@@ -48,9 +53,7 @@ if __name__ == "__main__":
     pool.close()
 
     # Save the measures of accessibility
-    for idx, hour in enumerate(focus_hours):
-        results[idx][0].to_file(os.path.join(RESULTS_FOLDER, f'E2SFCA_step1_{day}_h{hour}.geojson'))
-        results[idx][1].to_file(os.path.join(RESULTS_FOLDER, f'E2SFCA_step2_{day}_h{hour}.geojson'))
-
-
+    for idx in range(len(results)):
+        results[idx][0].to_file(f"./results/access/T_G2SFCA_step1_{days_[idx]}_h{hours_[idx]}.geojson")
+        results[idx][1].to_file(f"./results/access/T_G2SFCA_step2_{days_[idx]}_h{hours_[idx]}.geojson")
 
