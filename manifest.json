@@ -8,23 +8,23 @@
     "slurm_input_rules": {
            "time": {
                 "max": 10,
-                "min": 5,
+                "min": 10,
                 "default_value": 10,
                 "step": 1,
                 "unit": "Hours"
             },
             "memory_per_cpu": {
                 "max": 10,
-                "min": 4,
+                "min": 8,
                 "default_value": 8,
                 "step": 1,
                 "unit": "GB"
             },
             "num_of_task": {
-                "max": 32,
+                "max": 24,
                 "min": 16,
-                "default_value": 24,
-                "step": 6
+                "default_value": 16,
+                "step": 8
             }
     },
     "require_upload_data": false,
