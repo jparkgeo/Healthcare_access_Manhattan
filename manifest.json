@@ -22,9 +22,15 @@
             },
             "num_of_task": {
                 "max": 48,
-                "min": 16,
+                "min": 1,
                 "default_value": 16,
-                "step": 8
+                "step": 1
+            },
+            "cpu_per_task": {
+                "max": 48,
+                "min": 1,
+                "default_value": 16,
+                "step": 1
             }
     },
     "require_upload_data": false,
