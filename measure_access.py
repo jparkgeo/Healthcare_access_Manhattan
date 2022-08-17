@@ -11,6 +11,7 @@ days = ['wd', 'we']  # Weekday (wd), Weekend (we)
 hours = list(range(24))
 PROCESSORS = int(os.environ['SLURM_TASKS_PER_NODE'])
 RESULTS_FOLDER = os.getenv('result_folder')
+print(os.environ)
 print(f"The results folder is: {RESULTS_FOLDER}")
 print(f"The number of tasks on Slurm is : {os.environ['SLURM_TASKS_PER_NODE']}")
 # # print(f"CPU Count per tasks from mp package: {mp.cpu_count()}")
@@ -20,7 +21,7 @@ print(f"The number of tasks on Slurm is : {os.environ['SLURM_TASKS_PER_NODE']}")
 PWD = os.path.dirname(os.path.realpath(__file__))
 print(PWD)
 
-
+'''
 ### -------- MAIN CODE STARTS HERE -------- ###
 # Load input files
 general_doctors = gpd.read_file('./data/reference_data/general_physicians.geojson')
@@ -59,3 +60,4 @@ if __name__ == "__main__":
     for idx in range(len(results)):
         results[idx][0].to_file(f"./results/access/T_G2SFCA_step1_{days_[idx]}_h{hours_[idx]}.geojson")
         results[idx][1].to_file(f"./results/access/T_G2SFCA_step2_{days_[idx]}_h{hours_[idx]}.geojson")
+'''
