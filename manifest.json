@@ -21,7 +21,7 @@
                 "unit": "GB"
             },
             "num_of_task": {
-                "max": 24,
+                "max": 48,
                 "min": 16,
                 "default_value": 16,
                 "step": 8
