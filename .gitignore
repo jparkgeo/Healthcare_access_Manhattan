@@ -4,9 +4,10 @@
 /data/OSM_planet
 /data/Uber
 /data/Tiger
-.ipynb_checkpoints
-cache
 
+.ipynb_checkpoints
+.DS_Store
+cache
 
 
 # Byte-compiled / optimized / DLL files

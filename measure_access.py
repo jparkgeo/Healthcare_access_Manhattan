@@ -10,9 +10,11 @@ import os
 days = ['wd', 'we']  # Weekday (wd), Weekend (we)
 hours = list(range(24))
 PROCESSORS = int(os.environ['SLURM_TASKS_PER_NODE'])
+# PROCESSORS = 8
 RESULTS_FOLDER = os.getenv('result_folder')
 print(f"The results folder is: {RESULTS_FOLDER}")
 print(f"The number of tasks on Slurm is : {os.environ['SLURM_TASKS_PER_NODE']}")
+
 # # print(f"CPU Count per tasks from mp package: {mp.cpu_count()}")
 # print(f'entire os environment {os.environ}')
 # print(f"CPU Count per tasks through os package: {os.environ['SLURM_TASKS_PER_NODE']}")
@@ -43,6 +45,9 @@ product_day_hour = list(itertools.product(days, hours))
 days_ = [day for day, hour in product_day_hour]
 hours_ = [hour for day, hour in product_day_hour]
 
+# days_ = ['we' for i in range(24)]
+# hours_ = list(range(24))
+# print(days_, hours_)
 
 if __name__ == "__main__":
     pool = mp.Pool(PROCESSORS)
