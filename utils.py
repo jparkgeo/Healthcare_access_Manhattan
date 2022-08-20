@@ -238,7 +238,7 @@ def find_nearest_osm(network, gdf):
                           that was computed based on its geometry column
 
     """
-    # for idx, row in tqdm(gdf.iterrows(), total=gdf.shape[0]):
+    
     for idx, row in gdf.iterrows():
         if row.geometry.geom_type == 'Point':
             nearest_osm = ox.distance.nearest_nodes(network,
@@ -296,7 +296,7 @@ def E2SFCA_Step1(day, hour, supply_loc, supply_open, supply_weight, demand_loc, 
     supply_loc_ = supply_loc.copy(deep=True)
     supply_loc_[f'ratio_{day}_h{hour}'] = np.nan
 
-    for s_idx, s_row in tqdm(supply_loc_.iterrows(), total=supply_loc_.shape[0]):
+    for s_idx, s_row in supply_loc_.iterrows():
 
         if s_row[supply_open] == '1':  # If the facility is open
             supply_ctmt_area = calculate_catchment_area_convexhull(network, s_row['nearest_osm'], distant_decay.keys())
@@ -322,7 +322,7 @@ def E2SFCA_Step2(day, hour, supply_loc, demand_loc, ratio_var, network, distant_
     demand_loc_ = demand_loc.copy(deep=True)
     demand_loc_[f'access_{day}_h{hour}'] = np.nan
 
-    for d_idx, d_row in tqdm(demand_loc_.iterrows(), total=demand_loc_.shape[0]):
+    for d_idx, d_row in demand_loc_.iterrows():
         demand_ctmt_area = calculate_catchment_area_convexhull(network, d_row['nearest_osm'], distant_decay.keys())
 
         ctmt_ratio = 0.0
@@ -342,7 +342,7 @@ def G2SFCA_Step1(day, hour, supply_loc, supply_open, supply_weight, demand_loc, 
     supply_loc_ = supply_loc.copy(deep=True)
     supply_loc_[f'ratio_{day}_h{hour}'] = np.nan
 
-    for s_idx, s_row in tqdm(supply_loc_.iterrows(), total=supply_loc_.shape[0]):
+    for s_idx, s_row in supply_loc_.iterrows():
         if s_row[supply_open] == '1':  # If the facility is open
             access_nodes = nx.single_source_dijkstra_path_length(network,
                                                                  s_row['nearest_osm'],
@@ -375,7 +375,7 @@ def G2SFCA_Step2(day, hour, supply_loc, demand_loc, ratio_var, network, thres_tr
     demand_loc_ = demand_loc.copy(deep=True)
     demand_loc_[f'access_{day}_h{hour}'] = np.nan
 
-    for d_idx, d_row in tqdm(demand_loc_.iterrows(), total=demand_loc_.shape[0]):
+    for d_idx, d_row in demand_loc_.iterrows():
         access_nodes = nx.single_source_dijkstra_path_length(network,
                                                              d_row['nearest_osm'],
                                                              thres_trvl_time,
@@ -429,6 +429,7 @@ def measure_access(day, hour, supply_loc, demand_loc):
     demand_weight = f'{day}_h{hour}'
     ratio_var = f'ratio_{day}_h{hour}'
 
+    print(f'Step 1 starts for {day}, {hour}')
     supply_demand_ratio = G2SFCA_Step1(day,
                                        hour,
                                        supply_loc,
@@ -438,7 +439,7 @@ def measure_access(day, hour, supply_loc, demand_loc):
                                        demand_weight,
                                        G_hour
                                        )
-
+    print(f'Step 2 starts for {day}, {hour}')
     access = G2SFCA_Step2(day,
                           hour,
                           supply_demand_ratio,
