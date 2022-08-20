@@ -15,19 +15,25 @@
             },
             "memory_per_cpu": {
                 "max": 16,
-                "min": 8,
+                "min": 1,
                 "default_value": 8,
-                "step": 2,
+                "step": 1,
                 "unit": "GB"
             },
             "num_of_task": {
-                "max": 24,
-                "min": 16,
+                "max": 48,
+                "min": 1,
                 "default_value": 16,
-                "step": 8
+                "step": 1
+            },
+            "cpu_per_task": {
+                "max": 48,
+                "min": 1,
+                "default_value": 16,
+                "step": 1
             }
     },
-    "require_upload_data": false,
+    "require_upload_data": true,
     "supported_hpc": ["keeling_community", "expanse_community", "anvil_community"],
     "default_hpc": "keeling_community"
 }
