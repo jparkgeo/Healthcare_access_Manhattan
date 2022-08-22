@@ -14,7 +14,7 @@
                 "unit": "Hours"
             },
             "memory_per_cpu": {
-                "max": 8,
+                "max": 10,
                 "min": 8,
                 "default_value": 8,
                 "step": 2,
@@ -23,7 +23,7 @@
             "cpu_per_task": {
                 "max": 24,
                 "min": 16,
-                "default_value": 24,
+                "default_value": 16,
                 "step": 1
             }
     },

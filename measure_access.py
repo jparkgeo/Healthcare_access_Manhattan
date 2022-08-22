@@ -28,8 +28,8 @@ print(PWD)
 # Load input files
 general_doctors = gpd.read_file('./data/reference_data/general_physicians.geojson')
 commute_pop = gpd.read_file('./data/reference_data/floating_population_commute.geojson')
-commute_pop = commute_pop.loc[commute_pop['GEOID'].str.startswith('36085')]
-general_doctors = general_doctors.loc[general_doctors['geometry'].within(commute_pop.geometry.unary_union)]
+# commute_pop = commute_pop.loc[commute_pop['GEOID'].str.startswith('36085')]
+# general_doctors = general_doctors.loc[general_doctors['geometry'].within(commute_pop.geometry.unary_union)]
 
 # print(commute_pop.shape[0])
 # print(general_doctors.shape[0])
