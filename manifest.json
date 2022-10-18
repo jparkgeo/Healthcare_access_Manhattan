@@ -1,7 +1,7 @@
 {
-    "name": "Manhattan 24-hour healthcare accessibility",
-    "description": "Measuring accessibility to healthcare resources over 24 hours",
-    "estimated_runtime": "6 hours",
+    "name": "NYC Primary Care Accessibility",
+    "description": "Measuring 24-hour spatial accessibility to primary care in NYC",
+    "estimated_runtime": "10 hours",
     "container": "cybergisx-0.4",
     "pre_processing_stage": "bash update_osmnx.sh",
     "execution_stage": "python measure_access.py",
